@@ -1,11 +1,22 @@
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http)
-require('dotenv').config()
 
 //Using CORS policy
 const cors = require("cors");
+app.use(cors());
+
+//socket io connection
+const { createServer } = require('node:http');
+const { Server } = require('socket.io');
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
+});
+
+require('dotenv').config();
 
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json()
@@ -57,7 +68,7 @@ app.get('/create_room', (req, res) => {
         result += alphabet[Math.floor(Math.random() * 10000) % 25];
     }
 
-    //Saving newly creted roomt to database
+    //Saving newly created room to database
     const room = new Room({ uID: result, noOfUser: 1 });
     room.save().then(() => {
         console.log('room created', result);
@@ -76,7 +87,7 @@ app.get("/", (req, res) => {
 io.on('connection', (socket) => {
 
     // user join register room_id 
-    socket.on('join' , async room_id=>{
+    socket.on('join' , async room_id =>{
         console.log('user joined' , room_id);
         socket.join(room_id);
 
@@ -120,7 +131,8 @@ io.on('connection', (socket) => {
 require("./db/conn.js");
 
 //Start Up Server 
-const PORT = process.env.PORT || 8000;
-http.listen(PORT, () => {
-    console.log('Server is listening at PORT:', PORT);
+const PORT = process.env.PORT;
+
+server.listen(PORT, ()=> {
+    console.log(`Server running at PORT ${PORT}`);
 })
