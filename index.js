@@ -3,7 +3,13 @@ const app = express();
 
 //Using CORS policy
 const cors = require("cors");
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200
+  }
+  
+  app.use(cors(corsOptions));
 
 //socket io connection
 const { createServer } = require('node:http');
