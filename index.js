@@ -3,25 +3,26 @@ const app = express();
 
 //Using CORS policy
 const cors = require("cors");
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true,
-    optionsSuccessStatus: 200
-  }
-  
-  app.use(cors(corsOptions));
+// const corsOptions = {
+    // origin: 'http://localhost:3000',
+    // credentials: true,
+    // optionsSuccessStatus: 200
+//   }
+//   app.use(cors(corsOptions));
+  app.use(cors());
 
 //socket io connection
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const server = createServer(app);
-const io = new Server(server);
-// const io = new Server(server, {
-//     cors: {
-//         origin: "http://localhost:3000",
-//         methods: ["GET", "POST"],
-//     },
-// });
+// const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+        optionsSuccessStatus: 200
+    },
+});
 
 require('dotenv').config();
 
