@@ -9,12 +9,13 @@ app.use(cors());
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const server = createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-    },
-});
+const io = new Server(server);
+// const io = new Server(server, {
+//     cors: {
+//         origin: "http://localhost:3000",
+//         methods: ["GET", "POST"],
+//     },
+// });
 
 require('dotenv').config();
 
@@ -136,3 +137,5 @@ const PORT = process.env.PORT;
 server.listen(PORT, ()=> {
     console.log(`Server running at PORT ${PORT}`);
 })
+
+// https://aalucrossbackend-production.up.railway.app/  
